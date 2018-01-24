@@ -6,7 +6,7 @@
 package cl.controller;
 
 import cl.beans.PersonaBeanLocal;
-import cl.model.IUtilidad;
+
 import cl.model.Persona;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ControladorServlet", urlPatterns = {"/control.do"})
 public class ControladorServlet extends HttpServlet {
 
-    @Inject
-    private IUtilidad utilidad;
+//    @Inject
+//    private IUtilidad utilidad;
     
     //injectar el EJB
     @EJB
@@ -68,7 +68,7 @@ public class ControladorServlet extends HttpServlet {
 //        Persona p = utilidad.buscar(rut, list);
 //        p.setActivo(activo.equalsIgnoreCase("Si"));
 //        getServletContext().setAttribute("data",list);
-//        response.sendRedirect("personas.jsp");
+       response.sendRedirect("personas.jsp");
         
        
 
