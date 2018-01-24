@@ -5,11 +5,13 @@
  */
 package cl.controller;
 
+import cl.beans.PersonaBeanLocal;
 import cl.model.IUtilidad;
 import cl.model.Persona;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +29,10 @@ public class ControladorServlet extends HttpServlet {
 
     @Inject
     private IUtilidad utilidad;
+    
+    //injectar el EJB
+    @EJB
+    private PersonaBeanLocal service;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -52,23 +58,32 @@ public class ControladorServlet extends HttpServlet {
         String rut = request.getParameter("rut");
         String activo = request.getParameter("activo");
         
-        List<Persona> list = (List<Persona>)getServletContext().getAttribute("data");
         
-        Persona p = utilidad.buscar(rut, list);
-        p.setActivo(activo.equalsIgnoreCase("Si"));
-        getServletContext().setAttribute("data",list);
-        response.sendRedirect("personas.jsp");
+         // codigo EJB
+        service.editar(rut, activo.equalsIgnoreCase("si"));
         
         
+//        List<Persona> list = (List<Persona>)getServletContext().getAttribute("data");
+//        
+//        Persona p = utilidad.buscar(rut, list);
+//        p.setActivo(activo.equalsIgnoreCase("Si"));
+//        getServletContext().setAttribute("data",list);
+//        response.sendRedirect("personas.jsp");
+        
+       
 
     }
     
      protected void procesaRut(HttpServletRequest request, HttpServletResponse response, String boton)
             throws ServletException, IOException {
-         List<Persona> list = (List<Persona>)
-                 getServletContext().getAttribute("data");
          
-         Persona p = utilidad.buscar(boton, list);
+         //codido EJB
+         Persona p = service.buscar(boton);
+         
+//         List<Persona> list = (List<Persona>)
+//                 getServletContext().getAttribute("data");
+//         
+//         Persona p = utilidad.buscar(boton, list);
          request.setAttribute("persona",p);
          request.getRequestDispatcher("editarPersona.jsp").forward(request, response);
 
@@ -82,10 +97,13 @@ public class ControladorServlet extends HttpServlet {
         String rut = request.getParameter("rut");
         String clave = request.getParameter("clave");
 
-        List<Persona> list = (List<Persona>) getServletContext().getAttribute("data");//castear (List<Persona>)
-        log(""+list);
-        //buscar en la lista
-        Persona p = utilidad.loguear(rut, clave, list);
+//        List<Persona> list = (List<Persona>) getServletContext().getAttribute("data");//castear (List<Persona>)
+//        log(""+list);
+//        //buscar en la lista
+//        Persona p = utilidad.loguear(rut, clave, list);
+
+       //codigo EJB
+        Persona p = service.loguear(rut, clave);
 
         if (p == null) {
             request.setAttribute("msg", "error al iniciar sesion");
